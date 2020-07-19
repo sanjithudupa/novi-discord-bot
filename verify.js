@@ -5,14 +5,16 @@ const dateFormat = require('dateformat');
 const secret = require('./secret')
 
 client.on('guildMemberAdd', member => {
-    let role = member.guild.roles.cache.find(role => role.name === "unverified")
-    member.roles.add(role);
+    // let role = member.guild.roles.cache.find(role => role.name === "unverified")
+    // member.roles.add(role);
 
-    member.guild.channels.cache.find(channel => channel.name === "🔎verification").send(`Welcome to the Novi Discord Server, ${member}! Verify yourself to gain access to the rest of the server like this:`);
-    member.guild.channels.cache.find(channel => channel.name === "🔎verification").send('Name: Sanjith Udupa\n' +
+    member./*guild.channels.cache.find(channel => channel.name === "🔎verification").*/send(`Welcome to the Novi Discord Server, ${member}! Verify yourself to gain access to the rest of the server like this:`);
+    member./*guild.channels.cache.find(channel => channel.name === "🔎verification").*/send('Name: Sanjith Udupa\n' +
     'Email: novudupas49@stu.novik12.org\n' +
     'Grade: 9\n' +
     'Birthday: November 27');
+
+    newUser(member)
 
 });
 
@@ -28,14 +30,27 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+async function newUser(member){
+    let role = member.guild.roles.cache.find(role => role.name === "unverified")
+    member.roles.add(role);
+
+    await sleep(3000)
+
+    member.guild.channels.cache.find(channel => channel.name === "🔎verification").send(`Welcome to the Novi Discord Server, ${member}! Verify yourself to gain access to the rest of the server like this:`);
+    member.guild.channels.cache.find(channel => channel.name === "🔎verification").send('Name: First Last\n' +
+    'Email: YOUR_SCHOOL_EMAIL\n' +
+    'Grade: 9 (10,11,12, alumni)\n' +
+    'Birthday: November 27 (optional)');
+}
+
 async function processMessage(msg){
     if(msg.channel.name == "🔎verification" && msg.member.roles.cache.find(r => r.name === "unverified")){
         
         console.log(msg)
 
-        let text = msg.content
+        let text = msg.content  
 
-        if(!text.includes("Name")){
+        if(!(text.toLowerCase().includes("name") || text.toLowerCase().includes("email") || text.toLowerCase().includes("grade")|| text.toLowerCase().includes("birthday"))){
             return
         }
 
@@ -96,22 +111,24 @@ async function processMessage(msg){
 
         }
 
-        if(verified[0] == true && verified[1] == true && verified[2] == true){
-            msg.reply("you are now verified! Visit <#732432823641702550> to start talking with other Novi people!")
+        if(!verified.includes(false)){
+            msg.reply("you are now verified! Visit <#734161318717816922> to start talking with other Novi people!")
+            
+            let verification = msg.guild.channels.cache.find(channel => channel.name === "🔎verification")
+            verification.messages.fetch({limit: 50}).then(m => {
+                let filtered = m.filter(message => message.author === msg.author) 
+                verification.bulkDelete(filtered).then(messages => console.log(`bulkdeleted ${messages.size} messages from ${msg.author}`)).catch(console.error)
+                
+            })
+    
+            await sleep(2000)
+    
+            msg.member.roles.remove(msg.guild.roles.cache.find(role => role.name === "unverified"))
         }else{
             msg.reply("unable to verify!")
         }
         
-        let verification = msg.guild.channels.cache.find(channel => channel.name === "🔎verification")
-        verification.messages.fetch({limit: 50}).then(m => {
-            let filtered = m.filter(message => message.author === msg.author) 
-            verification.bulkDelete(filtered).then(messages => console.log(`bulkdeleted ${messages.size} messages from ${msg.author}`)).catch(console.error)
-            
-        })
-
-        await sleep(2000)
-
-        msg.member.roles.remove(msg.guild.roles.cache.find(role => role.name === "unverified"))
+       
 
     }
 }
