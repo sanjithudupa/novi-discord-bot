@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const emailExistence = require('email-existence');
 const dateFormat = require('dateformat');
+const swearjar = require('swearjar');
 const secret = require('./secret')
 
 let unverifiedMembers = {}
@@ -194,6 +195,25 @@ async function processMessage(msg){
             msg.reply("You are already verified")
         }
 
+    }else if(msg.content.toLowerCase().substring(0,8) == "nickname"){
+        if(serverMember.nickname != null){
+            let nickname = msg.content.toLowerCase().substring(8).trim()
+            if(!swearjar.profane(nickname)){
+                if(nickname == ""){
+                    let og = serverMember.nickname.split(" |")[0]
+                    serverMember.setNickname(og)
+                    msg.channel.send("Your nickname has been reset back to " + og)
+                }else{
+                    let newName = serverMember.nickname.split(" |")[0] + " | " + nickname
+                    serverMember.setNickname(newName)
+                    msg.channel.send("Your nickname has been set to " + newName)
+                }
+            }else{
+                msg.reply(" bruh this is a school server, keep it clean")
+            }
+        }else{
+            msg.channel.send("Only verified members can change nicknames")
+        }
     }
 }
 
