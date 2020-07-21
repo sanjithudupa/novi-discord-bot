@@ -31,7 +31,7 @@ client.on('ready', () => {
         .setImage('https://cdn.discordapp.com/icons/725185204477493268/a_f10a420303ab39c6b1aaf4c1dfb01a2b.webp?size=256')
         .setFooter('made for No.Vi by sanjithar#9679 and Spes#0845', 'https://cdn.discordapp.com/icons/725185204477493268/a_f10a420303ab39c6b1aaf4c1dfb01a2b.webp?size=256');
 
-    let server = client.guilds.cache.get("732432823205494898")
+    let server = client.guilds.cache.get("725185204477493268")
     let botSpam = server.channels.cache.find(channel => channel.name === "🤖bot-spam")
 
     botSpam.send(logonEmbed)
@@ -52,8 +52,8 @@ client.on('disconnect', () => {
         .setTitle("Bot is now going offline")
         .setImage('https://cdn.discordapp.com/icons/725185204477493268/a_f10a420303ab39c6b1aaf4c1dfb01a2b.webp?size=256')
         .setFooter('made for No.Vi by sanjithar#9679 and Spes#0845', 'https://cdn.discordapp.com/icons/725185204477493268/a_f10a420303ab39c6b1aaf4c1dfb01a2b.webp?size=256');
-
-    let server = client.guilds.cache.get("732432823205494898")
+    //732432823205494898 = test server
+    let server = client.guilds.cache.get("725185204477493268")
     let botSpam = server.channels.cache.find(channel => channel.name === "🤖bot-spam")
 
     botSpam.send(logoffEmbed)
@@ -64,8 +64,8 @@ function sleep(ms) {
 }
 
 async function newUser(member){
-    let role = member.guild.roles.cache.find(role => role.name === "unverified")
-    member.roles.add(role);
+    // let role = member.guild.roles.cache.find(role => role.name === "unverified")
+    // member.roles.add(role);
 
     member/*.guild.channels.cache.find(channel => channel.name === "🔎verification")*/.send(`Welcome to the Novi Discord Server, ${member}! Verify yourself to gain access to the rest of the server like this:`);
     member/*.guild.channels.cache.find(channel => channel.name === "🔎verification")*/.send('Name: First Last\n' +
@@ -76,9 +76,9 @@ async function newUser(member){
 
 async function processMessage(msg){
     // console.log(client.guilds.cache.get("732432823205494898").members.cache.get(msg.author.id).roles.cache.find(r => r.name === "unverified"))
-    let server = client.guilds.cache.get("732432823205494898")
+    let server = client.guilds.cache.get("725185204477493268")
     let serverMember = server.members.cache.get(msg.author.id)
-    let verificationLog = server.channels.cache.find(channel => channel.name === "verification-attempts")
+    let verificationLog = server.channels.cache.find(channel => channel.name === "log")
    
     if(msg.channel.type == "dm"){
         if(serverMember.roles.cache.find(r => r.name === "unverified")){
@@ -157,7 +157,7 @@ async function processMessage(msg){
             unverifiedMembers[msg.author.id] = verified
     
             if(!verified.includes(null)){
-                msg.reply("You are now verified! Visit <#734161318717816922> to start talking with other Novi people!")
+                msg.reply("You are now verified! Visit <#725185204477493271> to start talking with other Novi people!")
                 
                 delete unverifiedMembers[msg.author.id]
                 // let verification = server.channels.cache.find(channel => channel.name === "🔎verification")
@@ -168,11 +168,18 @@ async function processMessage(msg){
                 // })
         
                 // await sleep(2000)
+                // console.log(msg.author)
+                console.log(verified[0])
     
                 serverMember.setNickname(verified[0])
-                serverMember.roles.add(verified[1])
-        
-                serverMember.roles.remove(server.roles.cache.find(role => role.name === "unverified"))
+                if(serverMember.nickname == verified[0]){
+                    serverMember.roles.add(verified[1])
+                    serverMember.roles.remove(server.roles.cache.find(role => role.name === "unverified"))
+                }else{
+                    msg.reply("Something went wrong, please try again")
+                }
+
+               
             }else{
                 msg.reply("Unable to fully verify! Please list the following pieces of info:")
                 for(var i in verified){
@@ -256,7 +263,7 @@ function setGrade(grade, serverMember, server){
 function setBirthday(msg, birthday, server){
     // commands channel = 734062100154155080
     let date = dateFormat(birthday, "mmm dd").replace(" ", "-").toLowerCase()
-    server.channels.cache.find(channel => channel.name === "commands").send("bb.override " + msg.author.id + " bb.set " + date);
+    server.channels.cache.find(channel => channel.name === "sticky-notes").send("bb.override " + msg.author.id + " bb.set " + date);
     // msg.reply("please format your birthday in a standard format or omit it entirely")
 }
 
