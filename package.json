@@ -1,0 +1,32 @@
+{
+  "name": "novi-discord-bot",
+  "version": "1.0.0",
+  "description": "Bot for verifying new members of the No.VI Discord Server and for general use within the server",
+  "main": "bot/bot.js",
+  "dependencies": {
+    "dateformat": "^3.0.3",
+    "discord.js": "^12.2.0",
+    "email-existence": "^0.1.6",
+    "swearjar": "^0.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node dist/novi.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sanjithudupa/novi-discord-bot.git"
+  },
+  "keywords": [
+    "discord",
+    "novi",
+    "typescript",
+    "school"
+  ],
+  "author": "Sanjith Udupa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sanjithudupa/novi-discord-bot/issues"
+  },
+  "homepage": "https://github.com/sanjithudupa/novi-discord-bot#readme"
+}

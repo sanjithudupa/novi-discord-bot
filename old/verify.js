@@ -204,7 +204,7 @@ async function processMessage(msg){
 
     }else if(msg.content.toLowerCase().substring(0,8) == "nickname"){
         if(serverMember.nickname != null){
-            let nickname = msg.content.toLowerCase().substring(8).trim()
+            let nickname = msg.content.substring(8).trim()
             if(!swearjar.profane(nickname)){
                 if(nickname == ""){
                     let og = serverMember.nickname.split(" |")[0]
@@ -221,6 +221,18 @@ async function processMessage(msg){
         }else{
             msg.channel.send("Only verified members can change nicknames")
         }
+    }else if(msg.content.toLowerCase() == "s"){
+
+        async () => {
+            let fetched;
+            do {
+              fetched = await channel.fetchMessages({limit: 100});
+              console.log(fetched)
+            //   message.channel.bulkDelete(fetched);
+            }
+            while(fetched.size <= 100);
+          }
+        // console.log(msg.channel.messages)
     }
 }
 
